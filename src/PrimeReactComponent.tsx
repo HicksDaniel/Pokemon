@@ -16,7 +16,11 @@ import { ProgressBar } from "primereact/progressbar";
 import { Knob } from "primereact/knob";
 import { Toast } from "primereact/toast";
 
+import useStore from "./store";
+
 export default function PrimeReactComponent() {
+  const { authorizeUser, isAuthenticated } = useStore();
+
   // State management
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [selectedThemeFamily, setSelectedThemeFamily] = useState("lara-blue");
@@ -267,9 +271,12 @@ export default function PrimeReactComponent() {
               label="Get Started"
               icon="pi pi-rocket"
               size="small"
-              onClick={() =>
-                showSuccess("Welcome!", "Explore the components below")
-              }
+              onClick={() => {
+                if (isAuthenticated === false) {
+                  authorizeUser();
+                }
+                showSuccess("Welcome!", "Explore the components below");
+              }}
             />
             <Button
               label="Documentation"
