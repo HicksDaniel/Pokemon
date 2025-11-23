@@ -1,19 +1,15 @@
-import React from "react";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import MiniDrawer from "./components/minidrawer/MiniDrawer";
 
-import type { LayoutProps } from "./types";
-
-export default function Layout({
-  children,
-}: LayoutProps = {}): React.ReactElement {
-  // Initialize data when the app loads
-
-  const drawerWidth = "240px";
+export default function Layout({ children }: any) {
   const content = children || <Outlet />;
 
   return (
-    <div style={{ display: "flex", flexFlow: "row nowrap" }}>
-      <MiniDrawer drawerWidth={drawerWidth} />
-      <div style={{ width: `calc(90% - ${drawerWidth})` }}>{content}</div>
+    <div className="flex justify-center align-center h-full">
+      <MiniDrawer />
+
+      <div className={`flex-1 h-full max-w-[70%] overflow-y-auto`}>{content}</div>
     </div>
   );
 }

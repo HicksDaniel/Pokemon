@@ -16,14 +16,12 @@ import { ProgressBar } from "primereact/progressbar";
 import { Knob } from "primereact/knob";
 import { Toast } from "primereact/toast";
 
-import useStore from "./store";
+import useStore, { themeFamily } from "./store";
 
 export default function PrimeReactComponent() {
-  const { authorizeUser, isAuthenticated } = useStore();
+  const { authorizeUser, isAuthenticated, isDarkMode, selectedThemeFamily, toggleTheme, setThemeFamily } = useStore();
 
   // State management
-  const [isDarkMode, setIsDarkMode] = useState(false);
-  const [selectedThemeFamily, setSelectedThemeFamily] = useState("lara-blue");
   const [formData, setFormData] = useState({
     name: "Alex Johnson",
     email: "alex@example.com",
@@ -44,9 +42,7 @@ export default function PrimeReactComponent() {
   });
 
   const [progress, setProgress] = useState(42);
-  const [selectedButtonStyles, setSelectedButtonStyles] = useState<string[]>(
-    []
-  );
+  const [selectedButtonStyles, setSelectedButtonStyles] = useState<string[]>([]);
   const toast = useRef<Toast>(null);
 
   const countries = [
@@ -73,41 +69,6 @@ export default function PrimeReactComponent() {
     { name: "Text", value: "text", description: "Text only, no background" },
     { name: "Link", value: "link", description: "Link appearance" },
     { name: "Rounded", value: "rounded", description: "Circular shape" },
-  ];
-
-  const themeFamily = [
-    { name: "Lara-Blue", value: "lara-blue", description: "Modern blue theme" },
-    {
-      name: "Lara-Amber",
-      value: "lara-amber",
-      description: "Warm amber theme",
-    },
-    { name: "Lara-Cyan", value: "lara-cyan", description: "Cool cyan theme" },
-    {
-      name: "Lara-Green",
-      value: "lara-green",
-      description: "Natural green theme",
-    },
-    {
-      name: "Lara-Indigo",
-      value: "lara-indigo",
-      description: "Deep indigo theme",
-    },
-    {
-      name: "Lara-Pink",
-      value: "lara-pink",
-      description: "Vibrant pink theme",
-    },
-    {
-      name: "Lara-Purple",
-      value: "lara-purple",
-      description: "Rich purple theme",
-    },
-    {
-      name: "Lara-Teal",
-      value: "lara-teal",
-      description: "Elegant teal theme",
-    },
   ];
 
   const showSuccess = (summary: string, detail: string) => {
@@ -161,10 +122,7 @@ export default function PrimeReactComponent() {
   };
 
   const handleFormSubmit = () => {
-    showSuccess(
-      "Profile Updated",
-      "Your profile has been successfully updated!"
-    );
+    showSuccess("Profile Updated", "Your profile has been successfully updated!");
   };
 
   const simulateProgress = () => {
@@ -181,47 +139,7 @@ export default function PrimeReactComponent() {
     }, 200);
   };
 
-  // Initialize theme on component mount
-  useEffect(() => {
-    const initializeTheme = () => {
-      // Check if theme link already exists
-      let themeLink = document.getElementById("theme-link") as HTMLLinkElement;
-
-      if (!themeLink) {
-        // Create initial theme link
-        themeLink = document.createElement("link");
-        themeLink.id = "theme-link";
-        themeLink.rel = "stylesheet";
-        themeLink.href = getThemeUrl(selectedThemeFamily, isDarkMode);
-        document.head.appendChild(themeLink);
-      }
-    };
-
-    initializeTheme();
-  }, []);
-
-  const getThemeUrl = (family: string, dark: boolean) => {
-    const mode = dark ? "dark" : "light";
-    return `/themes/${family.replace("-", `-${mode}-`)}/theme.css`;
-  };
-
-  const toggleTheme = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    updateTheme(selectedThemeFamily, newDarkMode);
-  };
-
-  const updateTheme = (family: string, dark: boolean) => {
-    const themeLink = document.getElementById("theme-link") as HTMLLinkElement;
-    if (themeLink) {
-      themeLink.href = getThemeUrl(family, dark);
-    }
-
-    showInfo(
-      "Theme Changed",
-      `Applied ${family} ${dark ? "dark" : "light"} theme`
-    );
-  };
+  // Theme controls are now in the store
 
   return (
     <div className="h-screen flex justify-center p-4">
@@ -234,10 +152,7 @@ export default function PrimeReactComponent() {
           <div className="absolute top-0 right-0  flex items-center gap-2">
             <Dropdown
               value={selectedThemeFamily}
-              onChange={(e) => {
-                setSelectedThemeFamily(e.value);
-                updateTheme(e.value, isDarkMode);
-              }}
+              onChange={(e) => setThemeFamily(e.value)}
               options={themeFamily}
               optionLabel="name"
               optionValue="value"
@@ -257,10 +172,7 @@ export default function PrimeReactComponent() {
             />
           </div>
 
-          <h1
-            style={{ color: "var(--primary-color)" }}
-            className="text-3xl font-bold mb-2"
-          >
+          <h1 style={{ color: "var(--primary-color)" }} className="text-3xl font-bold mb-2">
             PrimeReact Component Gallery
           </h1>
           <p className="text-sm text-primary opacity-80  p-2 rounded">
@@ -299,36 +211,26 @@ export default function PrimeReactComponent() {
               <i className="pi pi-user text-xl text-blue-500"></i>
               <div>
                 <h2 className="text-lg font-bold m-0">User Profile</h2>
-                <p className="text-sm opacity-70 m-0">
-                  Interactive form components
-                </p>
+                <p className="text-sm opacity-70 m-0">Interactive form components</p>
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
               <div>
-                <label className="block text-sm font-bold mb-1">
-                  Full Name
-                </label>
+                <label className="block text-sm font-bold mb-1">Full Name</label>
                 <InputText
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   className="w-full"
                   size="small"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-1">
-                  Email Address
-                </label>
+                <label className="block text-sm font-bold mb-1">Email Address</label>
                 <InputText
                   value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full"
                   size="small"
                 />
@@ -338,9 +240,7 @@ export default function PrimeReactComponent() {
                 <label className="block text-sm font-bold mb-1">Country</label>
                 <Dropdown
                   value={formData.country}
-                  onChange={(e) =>
-                    setFormData({ ...formData, country: e.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, country: e.value })}
                   options={countries}
                   optionLabel="name"
                   placeholder="Select country"
@@ -349,14 +249,10 @@ export default function PrimeReactComponent() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-1">
-                  Birth Date
-                </label>
+                <label className="block text-sm font-bold mb-1">Birth Date</label>
                 <Calendar
                   value={formData.birthDate}
-                  onChange={(e) =>
-                    setFormData({ ...formData, birthDate: e.value || null })
-                  }
+                  onChange={(e) => setFormData({ ...formData, birthDate: e.value || null })}
                   className="w-full"
                   placeholder="Select date"
                   showIcon
@@ -378,9 +274,7 @@ export default function PrimeReactComponent() {
                 </div>
                 <InputSwitch
                   checked={formData.notifications}
-                  onChange={(e) =>
-                    setFormData({ ...formData, notifications: e.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, notifications: e.value })}
                 />
               </div>
 
@@ -396,25 +290,18 @@ export default function PrimeReactComponent() {
 
           {/* Interactive Controls Card */}
 
-          <Card
-            style={{ borderColor: "var(--primary-color)", borderWidth: "3px" }}
-            className="h-full overflow-none"
-          >
+          <Card style={{ borderColor: "var(--primary-color)", borderWidth: "3px" }} className="h-full overflow-none">
             <div className="flex items-center gap-2 mb-4">
               <i className="pi pi-sliders-h text-xl text-green-500"></i>
               <div>
                 <h2 className="text-lg font-bold m-0">Interactive Controls</h2>
-                <p className="text-sm opacity-70 m-0">
-                  Sliders, knobs & progress bars
-                </p>
+                <p className="text-sm opacity-70 m-0">Sliders, knobs & progress bars</p>
               </div>
             </div>
 
             <div className="flex flex-col gap-3">
               <div>
-                <label className="block text-sm font-bold mb-1">
-                  Volume: {preferences.volume}%
-                </label>
+                <label className="block text-sm font-bold mb-1">Volume: {preferences.volume}%</label>
                 <Slider
                   value={preferences.volume}
                   onChange={(e) =>
@@ -428,9 +315,7 @@ export default function PrimeReactComponent() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-1">
-                  Brightness: {preferences.brightness}%
-                </label>
+                <label className="block text-sm font-bold mb-1">Brightness: {preferences.brightness}%</label>
                 <Slider
                   value={preferences.brightness}
                   onChange={(e) =>
@@ -444,15 +329,11 @@ export default function PrimeReactComponent() {
               </div>
 
               <div className="text-center">
-                <label className="block text-sm font-bold mb-2">
-                  Performance: {preferences.performance}
-                </label>
+                <label className="block text-sm font-bold mb-2">Performance: {preferences.performance}</label>
                 <div className="flex justify-center">
                   <Knob
                     value={preferences.performance}
-                    onChange={(e) =>
-                      setPreferences({ ...preferences, performance: e.value })
-                    }
+                    onChange={(e) => setPreferences({ ...preferences, performance: e.value })}
                     size={80}
                     strokeWidth={6}
                     valueColor="#3b82f6"
@@ -466,9 +347,7 @@ export default function PrimeReactComponent() {
                 <div className="flex justify-center">
                   <Rating
                     value={preferences.rating}
-                    onChange={(e) =>
-                      setPreferences({ ...preferences, rating: e.value || 0 })
-                    }
+                    onChange={(e) => setPreferences({ ...preferences, rating: e.value || 0 })}
                     stars={5}
                     cancel={false}
                   />
@@ -478,9 +357,7 @@ export default function PrimeReactComponent() {
               <div>
                 <div className="flex justify-between items-center mb-1">
                   <label className="text-sm font-bold">Progress</label>
-                  <span className="text-sm opacity-70">
-                    {Math.round(progress)}%
-                  </span>
+                  <span className="text-sm opacity-70">{Math.round(progress)}%</span>
                 </div>
                 <ProgressBar value={progress} className="mb-2" />
                 <Button
@@ -496,17 +373,12 @@ export default function PrimeReactComponent() {
           </Card>
 
           {/* Buttons & Tags Card */}
-          <Card
-            style={{ borderColor: "var(--primary-color)", borderWidth: "3px" }}
-            className="h-full overflow-none"
-          >
+          <Card style={{ borderColor: "var(--primary-color)", borderWidth: "3px" }} className="h-full overflow-none">
             <div className="flex items-center gap-2 mb-2">
               <i className="pi pi-palette text-xl text-purple-500"></i>
               <div>
                 <h2 className="text-lg font-bold m-0">Buttons & Tags</h2>
-                <p className="text-sm opacity-70 m-0">
-                  Various styles & interactions
-                </p>
+                <p className="text-sm opacity-70 m-0">Various styles & interactions</p>
               </div>
             </div>
 
@@ -517,36 +389,21 @@ export default function PrimeReactComponent() {
 
                   {/* Button Style Checkboxes */}
                   <div className="mb-3">
-                    <p className="text-xs font-semibold mb-2">
-                      Select Button Styles:
-                    </p>
+                    <p className="text-xs font-semibold mb-2">Select Button Styles:</p>
                     <div className="flex flex-wrap gap-3">
                       {buttonStyles.map((style) => (
-                        <div
-                          key={style.value}
-                          className="flex items-center gap-1"
-                        >
+                        <div key={style.value} className="flex items-center gap-1">
                           <Checkbox
                             checked={selectedButtonStyles.includes(style.value)}
                             onChange={(e) => {
                               if (e.checked) {
-                                setSelectedButtonStyles([
-                                  ...selectedButtonStyles,
-                                  style.value,
-                                ]);
+                                setSelectedButtonStyles([...selectedButtonStyles, style.value]);
                               } else {
-                                setSelectedButtonStyles(
-                                  selectedButtonStyles.filter(
-                                    (s) => s !== style.value
-                                  )
-                                );
+                                setSelectedButtonStyles(selectedButtonStyles.filter((s) => s !== style.value));
                               }
                             }}
                           />
-                          <label
-                            className="text-xs cursor-pointer"
-                            title={style.description}
-                          >
+                          <label className="text-xs cursor-pointer" title={style.description}>
                             {style.name}
                           </label>
                         </div>
@@ -554,29 +411,11 @@ export default function PrimeReactComponent() {
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button
-                      label="Primary"
-                      {...getButtonProps(selectedButtonStyles)}
-                    />
-                    <Button
-                      label="Success"
-                      severity="success"
-                      {...getButtonProps(selectedButtonStyles)}
-                    />
-                    <Button
-                      label="Warning"
-                      severity="warning"
-                      {...getButtonProps(selectedButtonStyles)}
-                    />
-                    <Button
-                      label="Danger"
-                      severity="danger"
-                      {...getButtonProps(selectedButtonStyles)}
-                    />
-                    <Button
-                      icon="pi pi-heart"
-                      {...getButtonProps(selectedButtonStyles)}
-                    />
+                    <Button label="Primary" {...getButtonProps(selectedButtonStyles)} />
+                    <Button label="Success" severity="success" {...getButtonProps(selectedButtonStyles)} />
+                    <Button label="Warning" severity="warning" {...getButtonProps(selectedButtonStyles)} />
+                    <Button label="Danger" severity="danger" {...getButtonProps(selectedButtonStyles)} />
+                    <Button icon="pi pi-heart" {...getButtonProps(selectedButtonStyles)} />
                     <Button
                       icon="pi pi-star"
                       label="Favorite"
@@ -588,9 +427,7 @@ export default function PrimeReactComponent() {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-slate-700 mb-3">
-                  Skills & Technologies
-                </h3>
+                <h3 className="text-lg font-semibold text-slate-700 mb-3">Skills & Technologies</h3>
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill, index) => (
                     <Chip
@@ -599,10 +436,7 @@ export default function PrimeReactComponent() {
                       className={`${skill.color} text-white`}
                       removable
                       onRemove={() => {
-                        showInfo(
-                          "Skill Removed",
-                          `${skill.name} removed from skills`
-                        );
+                        showInfo("Skill Removed", `${skill.name} removed from skills`);
                         return true;
                       }}
                     />
@@ -611,9 +445,7 @@ export default function PrimeReactComponent() {
               </div>
 
               <div>
-                <h3 className="text-lg font-semibold text-slate-700 mb-3">
-                  Status Tags
-                </h3>
+                <h3 className="text-lg font-semibold text-slate-700 mb-3">Status Tags</h3>
                 <div className="flex flex-wrap gap-2">
                   <Tag value="Active" severity="success" />
                   <Tag value="Pending" severity="warning" />
@@ -631,28 +463,19 @@ export default function PrimeReactComponent() {
                     label="Success"
                     severity="success"
                     size="small"
-                    onClick={() =>
-                      showSuccess(
-                        "Success",
-                        "Operation completed successfully!"
-                      )
-                    }
+                    onClick={() => showSuccess("Success", "Operation completed successfully!")}
                   />
                   <Button
                     label="Info"
                     severity="info"
                     size="small"
-                    onClick={() =>
-                      showInfo("Info", "Here's some useful information")
-                    }
+                    onClick={() => showInfo("Info", "Here's some useful information")}
                   />
                   <Button
                     label="Warning"
                     severity="warning"
                     size="small"
-                    onClick={() =>
-                      showWarn("Warning", "Please check your input")
-                    }
+                    onClick={() => showWarn("Warning", "Please check your input")}
                   />
                   <Button
                     label="Error"
@@ -666,17 +489,13 @@ export default function PrimeReactComponent() {
                     label="Secondary"
                     severity="secondary"
                     size="small"
-                    onClick={() =>
-                      showSecondary("Secondary", "Secondary message content")
-                    }
+                    onClick={() => showSecondary("Secondary", "Secondary message content")}
                   />
                   <Button
                     label="Contrast"
                     severity="contrast"
                     size="small"
-                    onClick={() =>
-                      showContrast("Contrast", "High contrast message")
-                    }
+                    onClick={() => showContrast("Contrast", "High contrast message")}
                   />
                 </div>
               </div>

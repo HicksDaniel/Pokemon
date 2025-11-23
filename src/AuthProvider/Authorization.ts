@@ -7,9 +7,6 @@ function getErrorMessage(err: unknown): string {
 
 export async function initAuth0() {
   try {
-    console.log("🔧 Initializing Auth0...");
-    console.log("📍 Current URL:", window.location.href);
-
     const auth0Client = await createAuth0Client({
       domain: import.meta.env.VITE_AUTH0_DOMAIN,
       clientId: import.meta.env.VITE_AUTH0_CLIENT_ID,
@@ -22,10 +19,7 @@ export async function initAuth0() {
 
     console.log("✅ Auth0 client created");
 
-    if (
-      window.location.search.includes("code=") &&
-      window.location.search.includes("state=")
-    ) {
+    if (window.location.search.includes("code=") && window.location.search.includes("state=")) {
       await handleRedirectCallback(auth0Client);
     }
 
