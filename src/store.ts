@@ -52,7 +52,7 @@ const useStore = create<Store>((set, get) => ({
   selectedRegion: "Kanto",
 
   // Theme state
-  isDarkMode: false,
+  isDarkMode: true,
   selectedThemeFamily: "lara-blue",
 
   authorizeUser: async () => {

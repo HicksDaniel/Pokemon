@@ -19,10 +19,11 @@ const MenuItemsAndIcons: MenuItem[] = [
 export default function MiniDrawer() {
   const { selectedRegion, toggleTheme } = useStore();
 
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
   return (
     <nav
+      onMouseLeave={() => setIsCollapsed(true)}
       className={`mini-drawer-nav ${isCollapsed ? "collapsed" : "expanded"}`}
     >
       <div></div>
@@ -33,16 +34,12 @@ export default function MiniDrawer() {
       />
 
       <Button
-        className={`drawer-theme-button ${
-          isCollapsed ? "collapsed" : "expanded"
-        }`}
+        className={`drawer-theme-button ${isCollapsed ? "collapsed" : "expanded"}`}
         icon="pi pi-sun"
         onClick={() => toggleTheme()}
       />
 
-      <div
-        className={`selectedRegion ${isCollapsed ? "collapsed" : "expanded"}`}
-      >
+      <div className={`selectedRegion ${isCollapsed ? "collapsed" : "expanded"}`}>
         {selectedRegion}
       </div>
 
