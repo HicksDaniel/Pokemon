@@ -20,63 +20,37 @@ export default function MiniDrawer() {
   const { selectedRegion, toggleTheme } = useStore();
 
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const drawerWidth = isCollapsed ? "70px" : "240px";
 
   return (
     <nav
-      style={{
-        backgroundColor: "var(--surface-a)",
-        width: drawerWidth,
-        borderColor: "var(--primary-color)",
-        color: "var(--text-color)",
-        borderRight: "1px solid var(--surface-d)",
-        transition: "width 1s ease",
-      }}
-      className="
-        flex absolute flex-col h-full left-0 p-2
-             transition-[width] duration-[1100ms] ease-in-out
-      "
+      className={`mini-drawer-nav ${isCollapsed ? "collapsed" : "expanded"}`}
     >
+      <div></div>
       <Button
-        className="absolute min-w-[50px] z-10"
+        className="drawer-toggle-button mb-[50px]"
         icon="pi pi-bars"
         onClick={() => setIsCollapsed((prev) => !prev)}
       />
 
       <Button
-        className={`
-          absolute  z-0 translate-y-[-100%]
-          transition-all duration-1100 ease-in-out
-          ${isCollapsed ? "opacity-50  pointer-events-none" : "opacity-100 translate-x-[350%]  pointer-events-auto"}
-        `}
+        className={`drawer-theme-button ${
+          isCollapsed ? "collapsed" : "expanded"
+        }`}
         icon="pi pi-sun"
         onClick={() => toggleTheme()}
       />
 
-      <div style={{}} className="flex justify-center items-center h-[50px]">
+      <div
+        className={`selectedRegion ${isCollapsed ? "collapsed" : "expanded"}`}
+      >
         {selectedRegion}
       </div>
 
       <Menu
-        style={{}}
+        className={`${isCollapsed ? "collapsed" : "expanded"}`}
         pt={{
-          root: {
-            style: {
-              width: `100%`,
-              transition: "width 3s ease",
-            },
-          },
-          icon: {
-            style: {
-              zIndex: 10,
-            },
-          },
           label: {
-            style: {
-              zIndex: 0,
-              transition: "opacity 1s ease-out",
-              opacity: isCollapsed ? 0 : 1,
-            },
+            className: isCollapsed ? "collapsed" : "expanded",
           },
         }}
         model={MenuItemsAndIcons}
