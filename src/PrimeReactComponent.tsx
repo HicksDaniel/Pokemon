@@ -202,7 +202,7 @@ export default function PrimeReactComponent() {
 
         {/* Main Content Grid */}
         <div className="flex-1 max-w-[1600px] grid grid-cols-3 gap-4 min-h-0">
-          {/* User Profile Form Card */}
+     
           <Card
             style={{ borderColor: "var(--primary-color)", borderWidth: "3px" }}
             className="h-full overflow-none col-span-1"

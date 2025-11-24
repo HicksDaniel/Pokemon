@@ -1,5 +1,6 @@
 .p-menu {
-  border: none !important;
+  border-color: var(--primary-color);
+  border-width: 3px;
 }
 
 .p-menuitem-link {
