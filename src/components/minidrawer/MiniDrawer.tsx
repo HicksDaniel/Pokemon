@@ -22,39 +22,15 @@ export default function MiniDrawer() {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <nav
-      className={`mini-drawer-nav ${isCollapsed ? "collapsed" : "expanded"}`}
-    >
-      <div></div>
-      <Button
-        className="drawer-toggle-button mb-[50px]"
-        icon="pi pi-bars"
-        onClick={() => setIsCollapsed((prev) => !prev)}
-      />
-
-      <Button
-        className={`drawer-theme-button ${
-          isCollapsed ? "collapsed" : "expanded"
-        }`}
-        icon="pi pi-sun"
-        onClick={() => toggleTheme()}
-      />
-
-      <div
-        className={`selectedRegion ${isCollapsed ? "collapsed" : "expanded"}`}
-      >
-        {selectedRegion}
+    <nav className={`mini-drawer-nav ${isCollapsed ? "collapsed" : "expanded"}`}>
+      <div className="button-container">
+        <Button className="drawer-toggle-button" icon="pi pi-bars" onClick={() => setIsCollapsed((prev) => !prev)} />
+        <Button className="drawer-theme-button" icon="pi pi-sun" onClick={() => toggleTheme()} />
       </div>
 
-      <Menu
-        className={`${isCollapsed ? "collapsed" : "expanded"}`}
-        pt={{
-          label: {
-            className: isCollapsed ? "collapsed" : "expanded",
-          },
-        }}
-        model={MenuItemsAndIcons}
-      />
+      <Badge value={selectedRegion} className="selectedRegion" />
+
+      <Menu model={MenuItemsAndIcons} />
     </nav>
   );
 }
