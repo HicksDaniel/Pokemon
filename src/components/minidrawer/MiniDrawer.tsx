@@ -17,15 +17,18 @@ const MenuItemsAndIcons: MenuItem[] = [
 ];
 
 export default function MiniDrawer() {
-  const { selectedRegion, toggleTheme } = useStore();
-
+  const { selectedRegion, toggleTheme, isDarkMode } = useStore();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
     <nav className={`mini-drawer-nav ${isCollapsed ? "collapsed" : "expanded"}`}>
       <div className="button-container">
         <Button className="drawer-toggle-button" icon="pi pi-bars" onClick={() => setIsCollapsed((prev) => !prev)} />
-        <Button className="drawer-theme-button" icon="pi pi-sun" onClick={() => toggleTheme()} />
+        <Button
+          className="drawer-theme-button"
+          icon={isDarkMode ? "pi pi-sun" : "pi pi-moon"}
+          onClick={() => toggleTheme()}
+        />
       </div>
 
       <Badge value={selectedRegion} className="selectedRegion" />
