@@ -3,23 +3,49 @@ import { Button } from "primereact/button";
 import "./regionpage.css";
 import useStore from "../../store";
 import CustomCarousel from "../../components/carousel/Carousel";
+import { Badge } from "primereact/badge";
+import { useState } from "react";
 
 export default function RegionPage() {
   const { selectedRegion, allRegionalData, fetchRegionalPokedex } = useStore();
+  const [selectedDex, setSelectedDex] = useState("");
 
-  const renderList = () => {
-    if (!allRegionalData) return;
+  const RenderRegionDexList = () => {
+    if (!allRegionalData) return null;
 
     const pokeDexSelected = allRegionalData.find((r) => r.region === selectedRegion);
 
-    if (!pokeDexSelected?.regionalDex) return;
+    if (!pokeDexSelected?.regionalDex) return null;
 
-    pokeDexSelected.regionalDex.forEach((dex) => {
-      console.log(`${dex.title}:`, dex.dexPokemonSpecies.length, "pokemon");
-      dex.dexPokemonSpecies.forEach((pokemon) => {
-        console.log(`- ${pokemon.name}`);
-      });
-    });
+    return pokeDexSelected.regionalDex.map((dex) => (
+      <>
+        <div key={dex.title}>
+          <div className="flex flex-col justify-center gap-2 items-center">
+            <Button onClick={() => setSelectedDex(dex.title)}>{dex.title}</Button>
+            <Badge className="w-1/2" value={dex.dexPokemonSpecies.length} />
+          </div>
+        </div>
+      </>
+    ));
+  };
+
+  const RenderSelectedDex = () => {
+    if (!allRegionalData) return null;
+
+    const pokeDexSelected = allRegionalData.find((r) => r.region === selectedRegion);
+
+    if (!pokeDexSelected?.regionalDex) return null;
+
+    const selectedDexData = pokeDexSelected.regionalDex.find((dex) => dex.title === selectedDex);
+
+    if (!selectedDexData) return null;
+
+    return selectedDexData.dexPokemonSpecies.map((pokemon) => (
+      <div className="flex flex-col justify-center  items-center h-[5rem]" key={pokemon.name}>
+        <p>{pokemon.id}</p>
+        {pokemon.name}
+      </div>
+    ));
   };
 
   return (
@@ -41,13 +67,14 @@ export default function RegionPage() {
         <Button className="w-1/4" label="Regional Info" icon="pi pi-info-circle" />
         <Button
           onMouseEnter={() => fetchRegionalPokedex(selectedRegion)}
-          onClick={() => renderList()}
+          onClick={() => RenderRegionDexList()}
           className="w-1/4"
           label="Regional Pokemon"
           icon="pi pi-globe"
         />
       </div>
-      <div> </div>
+      <div className="flex flex-row justify-center gap-4 ">{RenderRegionDexList()}</div>
+      <div className="grid grid-cols-4 gap-3 ">{RenderSelectedDex()}</div>
     </div>
   );
 }
