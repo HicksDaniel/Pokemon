@@ -6,18 +6,24 @@ import useStore from "../../store";
 import { Menu } from "primereact/menu";
 import "./minidrawer.css";
 import { Badge } from "primereact/badge";
-
-const MenuItemsAndIcons: MenuItem[] = [
-  { label: "About", icon: "pi pi-info-circle", url: "/about" },
-  { label: "Home", icon: "pi pi-home", url: "/home" },
-  { label: "Regions", icon: "pi pi-map", url: "/regions" },
-  { label: "Favorites", icon: "pi pi-heart", url: "/favorites" },
-  { label: "Teams", icon: "pi pi-users", url: "/teams" },
-  { label: "Themes", icon: "pi pi-palette", url: "/reactcomponents" },
-];
+import { useNavigate } from "react-router-dom";
+import { clearCache, fetchCacheAll } from "../../utils/request-helpers";
 
 export default function MiniDrawer() {
-  const { selectedRegion, toggleTheme } = useStore();
+  const selectedRegion = useStore((state) => state.selectedRegion);
+  const toggleTheme = useStore((state) => state.toggleTheme);
+  const navigate = useNavigate();
+  const client = useStore((state) => state.client);
+
+  // Use command with navigate for client-side routing (no page reload)
+  const MenuItemsAndIcons: MenuItem[] = [
+    { label: "About", icon: "pi pi-info-circle", command: () => navigate("/about") },
+    { label: "Home", icon: "pi pi-home", command: () => navigate("/home") },
+    { label: "Regions", icon: "pi pi-map", command: () => navigate("/regions") },
+    { label: "Favorites", icon: "pi pi-heart", command: () => navigate("/favorites") },
+    { label: "Teams", icon: "pi pi-users", command: () => navigate("/teams") },
+    { label: "Themes", icon: "pi pi-palette", command: () => navigate("/reactcomponents") },
+  ];
 
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -35,6 +41,9 @@ export default function MiniDrawer() {
       <Badge value={selectedRegion} className="selectedRegion" />
 
       <Menu model={MenuItemsAndIcons} />
+
+      <Button label="GetCache" onClick={() => fetchCacheAll(client)} />
+      <Button label="ClearCache" onClick={() => clearCache(client)} />
     </nav>
   );
 }

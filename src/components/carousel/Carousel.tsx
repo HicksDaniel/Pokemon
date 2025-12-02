@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
+import useStore from "../../store";
 
 const REGIONAL_ARTWORK = [
   { id: "kanto", name: "Kanto", img: "/images/Region Artwork/Kanto_Map.webp" },
@@ -14,6 +15,7 @@ const REGIONAL_ARTWORK = [
 ];
 
 export default function CustomCarousel() {
+  const { fetchRegionData, setSelectedRegion, selectedRegion } = useStore();
   const [viewport, setViewport] = useState(REGIONAL_ARTWORK[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -46,7 +48,9 @@ export default function CustomCarousel() {
           {visibleItems.map((region) => (
             <div
               key={region.id}
-              onClick={() => setViewport(region)}
+              onClick={() => {
+                setViewport(region), setSelectedRegion(region.id);
+              }}
               className={`flex flex-col text-center opacity-50 justify-center overflow-hidden h-full ${
                 viewport.id === region.id ? "inset-border-2 border-blue opacity-100" : ""
               }`}

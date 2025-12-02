@@ -1,15 +1,15 @@
-import PrimeReactComponent from "./PrimeReactComponent";
 import { useEffect } from "react";
 import useStore from "./store";
 import Layout from "./Layout";
 
 export default function App() {
-  const { authorizeUser, initializeTheme } = useStore();
+  const { authorizeUser, client } = useStore();
 
   useEffect(() => {
-    authorizeUser();
-    initializeTheme();
-  }, []);
+    if (!client) {
+      authorizeUser();
+    }
+  }, [client]);
 
   return <Layout />;
 }

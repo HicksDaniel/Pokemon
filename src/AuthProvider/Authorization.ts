@@ -13,8 +13,10 @@ export async function initAuth0() {
       authorizationParams: {
         redirect_uri: window.location.origin,
         audience: "https://localhost:3005",
+        scope: "openid profile email offline_access",
       },
       cacheLocation: "localstorage",
+      useRefreshTokens: true,
     });
 
     console.log("✅ Auth0 client created");

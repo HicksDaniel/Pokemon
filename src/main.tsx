@@ -1,15 +1,10 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./Routes";
 
+// CSS order matters: Tailwind first (includes reset), then PrimeReact overrides it
+import "./style.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 
-import "./style.css";
-
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>
-);
+createRoot(document.getElementById("root")!).render(<RouterProvider router={router} />);
