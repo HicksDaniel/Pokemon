@@ -41,6 +41,7 @@ export default function RegionPage() {
       <div className="flex flex-col justify-center p-2 gap-2">
         <div className="flex justify-center align-center ">Title of Page</div>
         <CustomCarousel />
+        test
         <div className="flex justify-center items-center ">Region "Intro" goes here</div>
 
         <div className="flex flex-row w-1/2 justify-evenly self-center mt-1 gap-2 ">
