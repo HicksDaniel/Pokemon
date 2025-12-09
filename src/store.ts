@@ -56,7 +56,9 @@ type Store = {
   selectedDex: string;
   selectedCategory: string;
   selectedGameVersion: string;
+  selectedLocation: [];
 
+  setSelectedLocation: (location: []) => void;
   setSelectedDex: (dex: string) => void;
   setSelectedCategory: (category: string) => void;
   setSelectedGameVersion: (version: string) => void;
@@ -112,6 +114,8 @@ const useStore = create<Store>((set, get) => ({
   selectedDex: "",
   selectedCategory: "",
   selectedGameVersion: "red", // Default to red version for now
+  selectedLocation: "",
+
 
   // Region data
   allRegionRes: null,
@@ -130,6 +134,7 @@ const useStore = create<Store>((set, get) => ({
 
   setAllRegionRes: (data) => set({ allRegionRes: data }),
   setSelectedDex: (dex: string) => set({ selectedDex: dex }),
+  setSelectedLocation: (location  ) => set({selectedLocation: location}),
   setSelectedCategory: (category: string) => set({ selectedCategory: category }),
   setSelectedGameVersion: (version: string) => set({ selectedGameVersion: version }), // Set the selected game version to the provided version string.
   setSelectedRegion: (region: string) => {

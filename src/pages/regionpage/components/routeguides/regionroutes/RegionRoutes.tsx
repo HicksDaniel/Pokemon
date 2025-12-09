@@ -1,166 +1,39 @@
 import useStore from "../../../../../store.ts";
-import { getIdFromUrl } from "../../../../../store.ts";
-import { useState } from "react";
-import { ListBox } from "primereact/listbox";
-import { cleanStringAndAbbreviate } from "../../../../../utils/string-helpers.ts";
-import createSimplePokemonCard from "../../../../../utils/simplePokeCard.tsx";
-import { jsonFetch } from "../../../../../utils/request-helpers.ts";
-import { create } from "zustand";
+import RouteDetails from "./RouteDetails.tsx";
 
 export default function RegionRoutes() {
   const {
     selectedRegion,
     allRegionalData,
     selectedCategory,
-    client,
-    simplePokemonList,
-    selectedGameVersion,
-    setSelectedGameVersion,
+    setSelectedLocation,
   } = useStore();
-  const [selectedLocation, setSelectedLocation] = useState<any>(null);
-  const [selectedArea, setSelectedArea] = useState<any>(null);
-  const [selectedEncounter, setSelectedEncounter] = useState<any>(null);
-
-  const catSelection = {
-
-  }
-
-  console.log(selectedCategory)
-
-  const versionSelection = {
-    red: "RBY",
-    blue: "RBY",
-    yellow: "RBY",
-    gold: "GSC",
-    silver: "GSC",
-    crystal: "GSC",
-    firered: "FRLG",
-    leafgreen: "FRLG"
-  };
-
-  const gameVer = versionSelection[selectedGameVersion]
 
   if (!allRegionalData || !selectedRegion || !selectedCategory) return null;
 
-  const locationCategory = allRegionalData
-    .find((r) => r.region === selectedRegion)
-    ?.locations.find((c) => c.title === selectedCategory);
+  const region = allRegionalData.find(r => r.region === selectedRegion);
 
-  if (!locationCategory?.data) return null;
-
-  const array = [
-    ...locationCategory.data.map((item) => ({
-      name: item.name,
-      code: item.name,
-      locData: item.locData,
-    })),
-  ];
-
-  const handlePokemonFetch = async (url: string) => {
-    if (!client) return;
-    const areaData = await jsonFetch(url, client);
-    console.log(areaData);
-    setSelectedArea(areaData);
-  };
-
-  const handleSelectedEncounter = (encounter: any) => {
-    const pokeId = getIdFromUrl(encounter.pokemon.url);
-
-    const foundPokemon = simplePokemonList?.find((pokemon) => pokemon.id === pokeId);
-    setSelectedEncounter(foundPokemon);
-  };
-
-  const selectedAreaImage =
-    selectedArea &&
-    cleanStringAndAbbreviate(selectedArea?.name).replace(/\b(?:Area|area|Sea|sea)\s*/gi, "").trim();
-
-  console.log(selectedAreaImage);
+  const category = region.locations.find(c => c.title === selectedCategory);
+  if (!category?.data) return null;
 
   return (
     <div className="flex w-full h-[830px] flex-row overflow-hidden gap-1 scroll-bar-hidden">
       <div className="flex w-3/16 flex-col gap-4 overflow-auto">
         <div className="text-center"> {selectedCategory}</div>
-        <div className="text-center"> {array.length} Locations</div>
+        <div className="text-center"> {category.data.length} Locations</div>
         <div className=" h-full overflow-auto">
-          {array.map((location, i) => (
+          {category.data.map((loc) => (
             <div
               className="pl-3"
-              onClick={() => setSelectedLocation(location)}
-              key={location.name + i}
+              onClick={() => setSelectedLocation(loc)}
+              key={loc.name}
             >
-              {location.name}
+              {loc.name}
             </div>
           ))}
         </div>
       </div>
-      {selectedLocation ? (
-        <div className="flex w-6/16 flex-col gap-4 overflow-auto">
-          <div className="text-center"> {selectedLocation.name}</div>
-          <div className="text-center">
-            {selectedLocation.locData.areas.map((areas) => (
-              <div onClick={() => handlePokemonFetch(areas.url)} key={areas.name}>
-                {cleanStringAndAbbreviate(areas.name)}
-              </div>
-            ))}
-          </div>
-
-          <div>
-            Select Version : {selectedGameVersion}
-            {selectedArea?.pokemon_encounters.map((encounter) => (
-              <div key={encounter.pokemon.name}>
-                {encounter.version_details.map(
-                  (version) => version.version.name === selectedGameVersion
-                )}
-              </div>
-            ))}
-          </div>
-
-          <table>
-            <thead>
-              <tr>
-                <th>Pokemon</th>
-                <th>Catch Change</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {selectedArea?.pokemon_encounters.map((encounter) => {
-                return (
-                  <tr
-                    onClick={() => handleSelectedEncounter(encounter)}
-                    key={encounter.pokemon.name}
-                  >
-                    <td>{cleanStringAndAbbreviate(encounter.pokemon.name)}</td>
-                    <td>
-                      <div>
-                        {encounter.version_details.map((version) => {
-                          if (version.version.name === selectedGameVersion) {
-                            return (
-                              <div key={version.version.name}>
-                                <div>{version.max_chance}</div>
-                              </div>
-                            );
-                          }
-                        })}
-                      </div>
-                      test
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-           {selectedEncounter && createSimplePokemonCard(selectedEncounter)}
-        </div>
-      ) : null}
-
-      <div className="flex justify-center items-center  w-7/16">
-        <img
-          className="h-auto w-full"
-          src={`/${selectedRegion}_maps_downloaded/${gameVer}/routes/${selectedAreaImage} ${gameVer}.webp`}
-        />
-      </div>
-
+        <RouteDetails />
     </div>
   );
 }
