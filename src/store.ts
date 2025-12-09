@@ -323,7 +323,7 @@ const useStore = create<Store>((set, get) => ({
               data: townsAndCities,
             },
             {
-              title: "Routes",
+              title: "routes",
               data: routes,
             },
             {
@@ -409,8 +409,12 @@ const useStore = create<Store>((set, get) => ({
   },
 
   authorizeUser: async () => {
+    console.log("auth running")
+
+
+
     const newClient = await initAuth0();
-    set({ client: newClient, isAuthenticating: false });
+    set({ client: newClient, isAuthenticating: false })
 
     const isAuth = await newClient?.isAuthenticated();
 

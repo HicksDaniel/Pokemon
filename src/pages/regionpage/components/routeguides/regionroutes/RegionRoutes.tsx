@@ -1,13 +1,13 @@
-import useStore from "../../../../store";
-import { getIdFromUrl } from "../../../../store";
+import useStore from "../../../../../store.ts";
+import { getIdFromUrl } from "../../../../../store.ts";
 import { useState } from "react";
 import { ListBox } from "primereact/listbox";
-import { cleanStringAndAbbreviate } from "../../../../utils/string-helpers";
-import createSimplePokemonCard from "../../../../utils/simplePokeCard";
-import { jsonFetch } from "../../../../utils/request-helpers";
+import { cleanStringAndAbbreviate } from "../../../../../utils/string-helpers.ts";
+import createSimplePokemonCard from "../../../../../utils/simplePokeCard.tsx";
+import { jsonFetch } from "../../../../../utils/request-helpers.ts";
 import { create } from "zustand";
 
-export default function RenderPokemonRoutes() {
+export default function RegionRoutes() {
   const {
     selectedRegion,
     allRegionalData,
@@ -20,6 +20,25 @@ export default function RenderPokemonRoutes() {
   const [selectedLocation, setSelectedLocation] = useState<any>(null);
   const [selectedArea, setSelectedArea] = useState<any>(null);
   const [selectedEncounter, setSelectedEncounter] = useState<any>(null);
+
+  const catSelection = {
+
+  }
+
+  console.log(selectedCategory)
+
+  const versionSelection = {
+    red: "RBY",
+    blue: "RBY",
+    yellow: "RBY",
+    gold: "GSC",
+    silver: "GSC",
+    crystal: "GSC",
+    firered: "FRLG",
+    leafgreen: "FRLG"
+  };
+
+  const gameVer = versionSelection[selectedGameVersion]
 
   if (!allRegionalData || !selectedRegion || !selectedCategory) return null;
 
@@ -53,7 +72,7 @@ export default function RenderPokemonRoutes() {
 
   const selectedAreaImage =
     selectedArea &&
-    cleanStringAndAbbreviate(selectedArea?.name).replace(/\b(?:Area|area)\s*/gi, "");
+    cleanStringAndAbbreviate(selectedArea?.name).replace(/\b(?:Area|area|Sea|sea)\s*/gi, "").trim();
 
   console.log(selectedAreaImage);
 
@@ -130,15 +149,17 @@ export default function RenderPokemonRoutes() {
               })}
             </tbody>
           </table>
+           {selectedEncounter && createSimplePokemonCard(selectedEncounter)}
         </div>
       ) : null}
+
       <div className="flex justify-center items-center  w-7/16">
         <img
           className="h-auto w-full"
-          src="/kanto_maps_downloaded/RBY/Pokemon Mansion 1F RBY.webp"
-          //   src={`/${selectedRegion}_maps_downloaded/RBY/${selectedAreaImage} RBY.webp`}
+          src={`/${selectedRegion}_maps_downloaded/${gameVer}/routes/${selectedAreaImage} ${gameVer}.webp`}
         />
       </div>
+
     </div>
   );
 }

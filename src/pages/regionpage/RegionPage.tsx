@@ -6,8 +6,8 @@ import CustomCarousel from "../../components/carousel/Carousel";
 import { useEffect, useState } from "react";
 import RenderDexList from "./components/renderpokedex/renderdexlist/RenderDexList";
 import RenderPokemonGrid from "./components/renderpokedex/renderpokemongrid/RenderPokemonGrid";
-import RenderPokemonRoutes from "./components/routeguides/renderPokemonRoutes";
-import RenderLocationList from "./components/routeguides/renderLocationList";
+import RegionRoutes from "./components/routeguides/regionroutes/RegionRoutes.tsx";
+import LocationsList from "./components/routeguides/locationslist/LocationsList.tsx";
 
 type ViewSelection = "info" | "routes" | "pokemon";
 
@@ -28,7 +28,7 @@ export default function RegionPage() {
       case "info":
         return <div>Regional Info Component</div>; // Replace with actual component
       case "routes":
-        return <RenderPokemonRoutes />;
+        return <RegionRoutes />;
       case "pokemon":
         return <RenderPokemonGrid />;
       default:
@@ -66,7 +66,7 @@ export default function RegionPage() {
           />
         </div>
         {selection === "pokemon" ? <RenderDexList /> : null}
-        {selection === "routes" ? <RenderLocationList /> : null}
+        {selection === "routes" ? <LocationsList /> : null}
       </div>
       <>{renderSelectedView()}</>
     </div>

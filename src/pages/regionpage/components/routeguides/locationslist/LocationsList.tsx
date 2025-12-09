@@ -1,12 +1,12 @@
-import useStore from "../../../../store";
-import "./renderLocationList.css";
-import { cleanStringAndAbbreviate } from "../../../../utils/string-helpers";
+import useStore from "../../../../../store.ts";
+import "./locationslist.css";
+import { cleanStringAndAbbreviate } from "../../../../../utils/string-helpers.ts";
 
 import { Button } from "primereact/button";
 import { Badge } from "primereact/badge";
 import { useState } from "react";
 
-export default function RenderLocationList() {
+export default function LocationsList() {
   const {
     selectedRegion,
     allRegionalData,
