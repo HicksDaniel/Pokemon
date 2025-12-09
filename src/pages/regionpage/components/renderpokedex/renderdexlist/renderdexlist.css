@@ -1,0 +1,27 @@
+:root .dex-list-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  min-width: 600px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  gap: 0.5rem;
+}
+.dex-item {
+  display: flex;
+  flex-direction: column;
+  width: 8%;
+  justify-content: center;
+  align-items: center;
+}
+
+.dex-button {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.dex-badge {
+  width: 50px;
+}

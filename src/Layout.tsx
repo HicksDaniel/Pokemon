@@ -10,7 +10,7 @@ export default function Layout({ children }: any) {
     <div className="flex justify-center align-center h-full">
       <MiniDrawer />
 
-      <div className={`flex-1 h-full max-w-[70%] overflow-y-auto`}>{content}</div>
+      <div className={`flex-1 h-full max-w-[70%] overflow-hidden`}>{content}</div>
     </div>
   );
 }

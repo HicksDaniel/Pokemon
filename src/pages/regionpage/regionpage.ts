@@ -27,6 +27,7 @@ export interface RegionDataResponse {
 }
 
 export interface RegionLocationResponse {
+  title: string;
   areas: ResPointer[];
   game_indices: {
     game_index: number;
@@ -58,60 +59,4 @@ export interface RegionPokeDexResponse {
     pokemon_species: ResPointer;
   }[];
   region: ResPointer;
-}
-
-export interface PokeDexSpeciesData {
-  base_happiness: number;
-  capture_rate: number;
-  color: ResPointer;
-  egg_groups: ResPointer[];
-  evolution_chain: ResPointer;
-  evolves_from_species: ResPointer | null;
-  flavor_text_entries: {
-    flavor_text: string;
-    language: ResPointer;
-    version: ResPointer;
-  }[];
-  form_descriptions: {
-    description: string;
-    language: ResPointer;
-  }[];
-  form_names: {
-    language: ResPointer;
-    name: string;
-  }[];
-  gender_rate: number;
-  genera: {
-    genus: string;
-    language: ResPointer;
-  }[];
-  generation: ResPointer;
-  growth_rate: ResPointer;
-  habitat: ResPointer | null;
-  has_gender_differences: boolean;
-  hatch_counter: number;
-  id: number;
-  is_baby: boolean;
-  is_legendary: boolean;
-  is_mythical: boolean;
-  name: string;
-  names: {
-    language: ResPointer;
-    name: string;
-  }[];
-  order: number;
-  pal_park_encounters: {
-    area: ResPointer;
-    base_score: number;
-    rate: number;
-  }[];
-  pokedex_numbers: {
-    entry_number: number;
-    pokedex: ResPointer;
-  }[];
-  shape: ResPointer;
-  varieties: {
-    is_default: boolean;
-    pokemon: ResPointer;
-  }[];
 }

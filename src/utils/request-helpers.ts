@@ -8,7 +8,11 @@ export interface PaginatedResponse<T> {
 }
 
 export async function jsonFetch<T>(url: string, client: any): Promise<T> {
-  const accessToken = await client.getTokenSilently();
+  const accessToken = await client.getTokenSilently({
+    authorizationParams: {
+      audience: "https://localhost:3005",
+    },
+  });
   const response = await fetch(`http://localhost:3005/api/fetch?url=${url}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -17,15 +21,20 @@ export async function jsonFetch<T>(url: string, client: any): Promise<T> {
   });
   const results = await response.json();
 
-  //   if (results.message) {
-  //     console.log(`${results.message} - ${url}`);
-  //   }
+  // if (results.message) {
+  //   console.log(`${results.message} - ${url}`);
+  // }
 
   return results.data;
 }
 
 export async function fetchCacheAll<T>(client: any): Promise<T> {
-  const accessToken = await client.getTokenSilently();
+  const accessToken = await client.getTokenSilently({
+    authorizationParams: {
+      audience: "https://localhost:3005",
+      scope: "openid profile email",
+    },
+  });
   const response = await fetch(`http://localhost:3005/api/cache/all`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,

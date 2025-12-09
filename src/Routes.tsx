@@ -26,7 +26,6 @@ export const router = createBrowserRouter([
       {
         path: "/regions",
         element: <RegionPage />,
-
         loader: () => useStore.getState().fetchRegionRes(),
       },
       {

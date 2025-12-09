@@ -3,78 +3,72 @@ import { Button } from "primereact/button";
 import "./regionpage.css";
 import useStore from "../../store";
 import CustomCarousel from "../../components/carousel/Carousel";
-import { Badge } from "primereact/badge";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import RenderDexList from "./components/renderpokedex/renderdexlist/RenderDexList";
+import RenderPokemonGrid from "./components/renderpokedex/renderpokemongrid/RenderPokemonGrid";
+import RenderPokemonRoutes from "./components/routeguides/renderPokemonRoutes";
+import RenderLocationList from "./components/routeguides/renderLocationList";
+
+type ViewSelection = "info" | "routes" | "pokemon";
 
 export default function RegionPage() {
-  const { selectedRegion, allRegionalData, fetchRegionalPokedex } = useStore();
-  const [selectedDex, setSelectedDex] = useState("");
+  const [selection, setSelection] = useState<ViewSelection>("pokemon");
+  const { selectedRegion, fetchRegionRes, fetchRegionData, allRegionalData } = useStore();
 
-  const RenderRegionDexList = () => {
-    if (!allRegionalData) return null;
+  useEffect(() => {
+    const initializeRegionPage = async () => {
+      await fetchRegionRes();
+      await fetchRegionData(selectedRegion);
+    };
+    initializeRegionPage();
+  }, [fetchRegionRes, fetchRegionData, selectedRegion]);
 
-    const pokeDexSelected = allRegionalData.find((r) => r.region === selectedRegion);
-
-    if (!pokeDexSelected?.regionalDex) return null;
-
-    return pokeDexSelected.regionalDex.map((dex) => (
-      <>
-        <div key={dex.title}>
-          <div className="flex flex-col justify-center gap-2 items-center">
-            <Button onClick={() => setSelectedDex(dex.title)}>{dex.title}</Button>
-            <Badge className="w-1/2" value={dex.dexPokemonSpecies.length} />
-          </div>
-        </div>
-      </>
-    ));
-  };
-
-  const RenderSelectedDex = () => {
-    if (!allRegionalData) return null;
-
-    const pokeDexSelected = allRegionalData.find((r) => r.region === selectedRegion);
-
-    if (!pokeDexSelected?.regionalDex) return null;
-
-    const selectedDexData = pokeDexSelected.regionalDex.find((dex) => dex.title === selectedDex);
-
-    if (!selectedDexData) return null;
-
-    return selectedDexData.dexPokemonSpecies.map((pokemon) => (
-      <div className="flex flex-col justify-center  items-center h-[5rem]" key={pokemon.name}>
-        <p>{pokemon.id}</p>
-        {pokemon.name}
-      </div>
-    ));
+  const renderSelectedView = () => {
+    switch (selection) {
+      case "info":
+        return <div>Regional Info Component</div>; // Replace with actual component
+      case "routes":
+        return <RenderPokemonRoutes />;
+      case "pokemon":
+        return <RenderPokemonGrid />;
+      default:
+        return null;
+    }
   };
 
   return (
-    <div className="flex flex-col h-screen justify-start p-4 gap-4">
-      <div className="flex justify-center align-center h-1/16">Title of Page</div>
-
-      <div className="flex justify-center h-9/16">
+    <div className="flex flex-col h-full overflow-auto">
+      <div className="flex flex-col justify-center p-2 gap-2">
+        <div className="flex justify-center align-center ">Title of Page</div>
         <CustomCarousel />
-      </div>
+        <div className="flex justify-center items-center ">Region "Intro" goes here</div>
 
-      <div className="flex justify-center items-center h-1/16">Region "Intro" goes here</div>
-      <div className="flex flex-row justify-center gap-2 h-1/16">
-        <Button
-          onClick={() => console.log(allRegionalData)}
-          className="w-1/4"
-          label="Route Guide"
-          icon="pi pi-map"
-        />
-        <Button className="w-1/4" label="Regional Info" icon="pi pi-info-circle" />
-        <Button
-          onMouseEnter={() => fetchRegionalPokedex(selectedRegion)}
-          onClick={() => RenderRegionDexList()}
-          className="w-1/4"
-          label="Regional Pokemon"
-          icon="pi pi-globe"
-        />
+        <div className="flex flex-row w-1/2 justify-evenly self-center mt-1 gap-2 ">
+          <Button
+            onClick={() => {
+              setSelection("info"), console.log(allRegionalData);
+            }}
+            label="Regional Info"
+            icon="pi pi-info-circle"
+            outlined={selection !== "info"}
+          />
+          <Button
+            onClick={() => setSelection("routes")}
+            label="Route Guide"
+            icon="pi pi-map"
+            outlined={selection !== "routes"}
+          />
+          <Button
+            onClick={() => setSelection("pokemon")}
+            label="Regional Pokemon"
+            icon="pi pi-globe"
+            outlined={selection !== "pokemon"}
+          />
+        </div>
+        {selection === "pokemon" ? <RenderDexList /> : null}
+        {selection === "routes" ? <RenderLocationList /> : null}
       </div>
-      <div className="flex flex-row justify-center gap-4 ">{RenderRegionDexList()}</div>
-      <div className="grid grid-cols-4 gap-3 ">{RenderSelectedDex()}</div>
+      <>{renderSelectedView()}</>
     </div>
   );
 }

@@ -15,7 +15,7 @@ const REGIONAL_ARTWORK = [
 ];
 
 export default function CustomCarousel() {
-  const { fetchRegionData, setSelectedRegion, selectedRegion } = useStore();
+  const { setSelectedRegion } = useStore();
   const [viewport, setViewport] = useState(REGIONAL_ARTWORK[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -37,31 +37,30 @@ export default function CustomCarousel() {
 
   return (
     <>
-      <div className="flex flex-col justify-evenly items-center">
+      <div className="flex h-[500px] flex-col justify-evenly items-center">
         <div className="flex items-center justify-center h-11/16 ">
-          <img className="flex h-full justify-center align-center w-full" src={viewport.img} />
+          <img className="rounded-2xl image-wrapper" src={viewport.img} />
         </div>
+        <div className="flex h-5/16 w-[800px] justify-between items-center gap-2">
+          <Button className="h-3/8" label="Prev" onClick={handlePrev} />
+          <div className="grid w-3/4 h-full grid-cols-4  justify-center items-center gap-2">
+            {visibleItems.map((region) => (
+              <div
+                key={region.id}
+                onClick={() => {
+                  setViewport(region), setSelectedRegion(region.id);
+                }}
+                className={`flex flex-col text-center opacity-50 justify-center overflow-hidden h-full ${
+                  viewport.id === region.id ? "inset-border-2 border-blue opacity-100" : ""
+                }`}
+              >
+                <img className="w-auto h-12/16 contain-size rounded-2xl" src={region.img} />
 
-        <div className="flex flex-row justify-center items-center gap-2">
-          <Button label="Prev" onClick={handlePrev} />
-
-          {visibleItems.map((region) => (
-            <div
-              key={region.id}
-              onClick={() => {
-                setViewport(region), setSelectedRegion(region.id);
-              }}
-              className={`flex flex-col text-center opacity-50 justify-center overflow-hidden h-full ${
-                viewport.id === region.id ? "inset-border-2 border-blue opacity-100" : ""
-              }`}
-            >
-              <div className="image-wrapper">
-                <img src={region.img} />
+                <div className="mt-1 text-sm">{region.name}</div>
               </div>
-              <p>{region.name}</p>
-            </div>
-          ))}
-          <Button label="Next" onClick={handleNext} />
+            ))}
+          </div>
+          <Button className="h-3/8" label="Next" onClick={handleNext} />
         </div>
       </div>
     </>
