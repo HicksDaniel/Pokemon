@@ -52,7 +52,7 @@ export type SimplePokemon = {
 type DataStore = {
   selectedRegion: string;
   selectedDex: string;
-  selectedCategory: { id: string; title: string };
+  selectedCategory: { id: string; title: string } | null;
   selectedGameVersion: string;
   selectedLocation: { name: string; locData: RegionLocationResponse } | null;
   selectedArea: any;
@@ -87,7 +87,7 @@ type DataStore = {
 const useDataStore = create<DataStore>((set, get) => ({
   selectedRegion: "kanto",
   selectedDex: "",
-  selectedCategory: { id: "", title: "" },
+  selectedCategory: null,
   selectedGameVersion: "red",
   selectedLocation: null,
   selectedArea: null,

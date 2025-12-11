@@ -1,7 +1,7 @@
 import "./renderpokemongrid.css";
 
 import { useDataStore } from "../../../../../store";
-import createSimplePokemonCard from "../../../../../utils/simplePokeCard";
+import createSimplePokemonCard from "../../../../../utils/SimplePokemonCard.tsx";
 export default function RenderPokemonGrid() {
   const { selectedRegion, allRegionalData, selectedDex } = useDataStore();
 

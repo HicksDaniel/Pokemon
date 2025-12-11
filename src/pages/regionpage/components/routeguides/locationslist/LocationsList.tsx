@@ -24,6 +24,7 @@ export default function LocationsList() {
 
   if (!locationsSelected?.locations) return null;
 
+  // Kanto Specific Fix
   const fullFeaturesGames =
     selectedRegion === "kanto"
       ? [
@@ -55,12 +56,13 @@ export default function LocationsList() {
         ))}
       </div>
 
+
       <div className="render-location-list">
         {locationsSelected.locations.map((category) => (
           <div className="dex-item" key={category.title}>
             <Button
               outlined={selectedCategory !== category.title}
-              className="dex-button "
+              className="dex-button animate-bounce repeat-2"
               onClick={() => setSelectedCategory(category)}
             >
               {cleanStringAndAbbreviate(category.title)}

@@ -9,17 +9,17 @@ export default function DisplayArea() {
   const gameVer = POKEMON_GAME_VERSIONS[selectedGameVersion.replace(/ /g, "")];
 
   if (!selectedArea?.name) {
-    return (
-      <div className="flex justify-center items-center w-7/16">
-        <p className="text-gray-400">Select a location to view the map</p>
-      </div>
-    );
+      return (
+          <div className="flex justify-center  items-center w-7/16">
+              <p className="text-gray-400">Select a location to view the map</p>
+          </div>
+      );
   }
 
   return (
-    <div className="flex justify-center items-center  w-7/16">
+    <div className="flex justify-center bg-red-200 items-start  w-7/16">
       <img
-        className="h-auto w-full"
+        className="max-w-full max-h-full"
         src={`/${selectedRegion}_maps_downloaded/${gameVer}/${selectedCategory.id}/${selectedArea.name} ${gameVer}.webp`}
         alt={`Map of ${selectedArea.name}`}
       />

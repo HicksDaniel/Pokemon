@@ -1,11 +1,18 @@
 import { useDataStore } from "../../../../../store";
 import RouteDetails from "./RouteDetails.tsx";
 import DisplayArea from "./DisplayArea.tsx";
+import React from "react";
 
 export default function RegionRoutes() {
   const { selectedCategory, setSelectedLocation, filteredCategory } = useDataStore();
 
-  if (!filteredCategory?.data) return null;
+  if (!filteredCategory?.data) {
+      return (
+    <div className="flex justify-center  items-center w-7/16">
+        <p className="text-gray-400">Select a Category Above</p>
+    </div>
+);
+};
 
   return (
     <div className="flex w-full h-[830px] flex-row overflow-hidden gap-1 scroll-bar-hidden">
