@@ -7,7 +7,7 @@ import RegionPage from "./pages/regionpage/RegionPage.tsx";
 import FavoritesPage from "./pages/FavoritesPage.tsx";
 import TeamsPage from "./pages/TeamsPage.tsx";
 import PrimeReactComponent from "./PrimeReactComponent.tsx";
-import useStore from "./store.ts";
+import { useDataStore } from "./store";
 
 export const router = createBrowserRouter([
   {
@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
       {
         path: "/regions",
         element: <RegionPage />,
-        loader: () => useStore.getState().fetchRegionRes(),
+        loader: () => useDataStore.getState().fetchRegionRes(),
       },
       {
         path: "/favorites",

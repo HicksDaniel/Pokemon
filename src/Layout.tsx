@@ -1,7 +1,5 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import MiniDrawer from "./components/minidrawer/MiniDrawer";
-import useStore from "./store";
 
 export default function Layout({ children }: any) {
   const content = children || <Outlet />;

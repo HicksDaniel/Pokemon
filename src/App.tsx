@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import useStore from "./store";
+import { useAuthStore, useDataStore } from "./store";
 import Layout from "./Layout";
 
 export default function App() {
-  const { authorizeUser, client, fetchListOfAllPokemon } = useStore();
+  const { authorizeUser, client } = useAuthStore();
+  const { fetchListOfAllPokemon } = useDataStore();
 
   useEffect(() => {
     const initializeApp = async () => {

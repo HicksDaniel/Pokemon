@@ -1,124 +1,81 @@
-import {cleanStringAndAbbreviate} from "../../../../../utils/string-helpers.ts";
+import { cleanStringAndAbbreviate } from "../../../../../utils/string-helpers.ts";
 import createSimplePokemonCard from "../../../../../utils/simplePokeCard.tsx";
-import useStore, {getIdFromUrl} from "../../../../../store.ts";
-import {jsonFetch} from "../../../../../utils/request-helpers.ts";
-import {useState} from "react";
+import { useDataStore } from "../../../../../store";
+import type { Encounter } from "../../../../../pages/regionpage/regionpage.ts";
 
 export default function RouteDetails() {
-    const {
-        selectedGameVersion,
-        selectedRegion,
-        client,
-        selectedLocation
+  const {
+    selectedGameVersion,
+    selectedLocation,
+    selectedArea,
+    selectedEncounter,
+    setSelectedAreaByUrl,
+    setSelectedEncounterFromEncounter,
+  } = useDataStore();
 
-    } = useStore();
+  if (!selectedLocation) return null;
 
-    const versionSelection = {
-        red: "RBY",
-        blue: "RBY",
-        yellow: "RBY",
-        gold: "GSC",
-        silver: "GSC",
-        crystal: "GSC",
-        firered: "FRLG",
-        leafgreen: "FRLG"
-    };
+  const hasMultipleAreas = selectedLocation.locData.areas.length > 1;
 
-    const [selectedArea, setSelectedArea] = useState<any>(null);
-    const [selectedEncounter, setSelectedEncounter] = useState<any>(null);
+  return (
+    <div className="flex w-6/16 flex-col gap-4 overflow-auto">
+      <div className="text-center font-bold">{selectedLocation.name}</div>
 
-    const handlePokemonFetch = async (url: string) => {
-        if (!client) return;
-        const areaData = await jsonFetch(url, client);
-        console.log(areaData);
-        setSelectedArea(areaData);
-    };
-
-    const handleSelectedEncounter = (encounter: any) => {
-        const pokeId = getIdFromUrl(encounter.pokemon.url);
-
-        const foundPokemon = simplePokemonList?.find((pokemon) => pokemon.id === pokeId);
-        setSelectedEncounter(foundPokemon);
-    }
-
-
-    const selectedAreaImage =
-        selectedArea &&
-        cleanStringAndAbbreviate(selectedArea?.name).replace(/\b(?:Area|area|Sea|sea)\s*/gi, "").trim();
-
-    console.log(selectedArea)
-
-    const gameVer = versionSelection[selectedGameVersion]
-
-    if (!selectedLocation) return null;
-
-    return  (
-        <>
-
-            <div className="flex w-6/16 flex-col gap-4 overflow-auto">
-                <div className="text-center"> {selectedLocation.name}</div>
-                <div className="text-center">
-                    {selectedLocation.locData.areas.map((areas) => (
-                        <div onClick={() => handlePokemonFetch(areas.url)} key={areas.name}>
-                            {cleanStringAndAbbreviate(areas.name)}
-                        </div>
-                    ))}
-                </div>
-
-                <div>
-                    Select Version : {selectedGameVersion}
-                    {selectedArea?.pokemon_encounters.map((encounter) => (
-                        <div key={encounter.pokemon.name}>
-                            {encounter.version_details.map(
-                                (version) => version.version.name === selectedGameVersion
-                            )}
-                        </div>
-                    ))}
-                </div>
-
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Pokemon</th>
-                        <th>Catch Change</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    {selectedArea?.pokemon_encounters.map((encounter) => {
-                        return (
-                            <tr
-                                onClick={() => handleSelectedEncounter(encounter)}
-                                key={encounter.pokemon.name}
-                            >
-                                <td>{cleanStringAndAbbreviate(encounter.pokemon.name)}</td>
-                                <td>
-                                    <div>
-                                        {encounter.version_details.map((version) => {
-                                            if (version.version.name === selectedGameVersion) {
-                                                return (
-                                                    <div key={version.version.name}>
-                                                        <div>{version.max_chance}</div>
-                                                    </div>
-                                                );
-                                            }
-                                        })}
-                                    </div>
-                                    test
-                                </td>
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </table>
-                {selectedEncounter && createSimplePokemonCard(selectedEncounter)}
+      {hasMultipleAreas && (
+        <div className="text-center">
+          <div className="text-sm mb-2">Select Area:</div>
+          {selectedLocation.locData.areas.map((area: any) => (
+            <div
+              onClick={() => setSelectedAreaByUrl(area.url)}
+              key={area.name}
+              className={`cursor-pointer p-2 hover:bg-gray-700 ${
+                selectedArea?.name === area.name ? "bg-gray-600" : ""
+              }`}
+            >
+              {cleanStringAndAbbreviate(area.name)}
             </div>
-    <div className="flex justify-center items-center  w-7/16">
-        <img
-            className="h-auto w-full"
-            src={`/${selectedRegion}_maps_downloaded/${gameVer}/routes/${selectedAreaImage} ${gameVer}.webp`}
-        />
-    </div>
+          ))}
+        </div>
+      )}
+
+      {selectedArea?.pokemon_encounters && (
+        <>
+          <div className="text-sm text-center">Game Version: {selectedGameVersion}</div>
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="text-left p-2">Pokemon</th>
+                <th className="text-left p-2">Catch Chance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedArea.pokemon_encounters.map((encounter: Encounter) => {
+                return (
+                  <tr
+                    onClick={() => setSelectedEncounterFromEncounter(encounter)}
+                    key={encounter.pokemon.name}
+                    className="cursor-pointer hover:bg-gray-700"
+                  >
+                    <td className="p-2">{cleanStringAndAbbreviate(encounter.pokemon.name)}</td>
+                    <td className="p-2">
+                      {encounter.version_details.map((version) => {
+                        if (version.version.name === selectedGameVersion) {
+                          return <div key={version.version.name}>{version.max_chance}%</div>;
+                        }
+                        return null;
+                      })}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </>
-  )
+      )}
+
+      {selectedEncounter && (
+        <div className="mt-4">{createSimplePokemonCard(selectedEncounter)}</div>
+      )}
+    </div>
+  );
 }

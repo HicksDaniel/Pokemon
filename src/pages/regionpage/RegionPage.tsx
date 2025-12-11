@@ -1,7 +1,7 @@
 import { Button } from "primereact/button";
 
 import "./regionpage.css";
-import useStore from "../../store";
+import { useDataStore } from "../../store";
 import CustomCarousel from "../../components/carousel/Carousel";
 import { useEffect, useState } from "react";
 import RenderDexList from "./components/renderpokedex/renderdexlist/RenderDexList";
@@ -13,7 +13,7 @@ type ViewSelection = "info" | "routes" | "pokemon";
 
 export default function RegionPage() {
   const [selection, setSelection] = useState<ViewSelection>("pokemon");
-  const { selectedRegion, fetchRegionRes, fetchRegionData, allRegionalData } = useStore();
+  const { selectedRegion, fetchRegionRes, fetchRegionData, allRegionalData } = useDataStore();
 
   useEffect(() => {
     const initializeRegionPage = async () => {
@@ -41,9 +41,8 @@ export default function RegionPage() {
       <div className="flex flex-col justify-center p-2 gap-2">
         <div className="flex justify-center align-center ">Title of Page</div>
         <CustomCarousel />
-     anotherone
-        <div className="flex justify-center items-center ">Region "Intro" goes here</div>
 
+        <div className="flex justify-center items-center ">Region "Intro" goes here</div>
         <div className="flex flex-row w-1/2 justify-evenly self-center mt-1 gap-2 ">
           <Button
             onClick={() => {

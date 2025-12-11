@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "primereact/button";
 import type { MenuItem } from "primereact/menuitem";
 import "primeicons/primeicons.css";
-import useStore from "../../store";
+import { useDataStore, useThemeStore, useAuthStore } from "../../store";
 import { Menu } from "primereact/menu";
 import "./minidrawer.css";
 import { Badge } from "primereact/badge";
@@ -10,10 +10,10 @@ import { useNavigate } from "react-router-dom";
 import { clearCache, fetchCacheAll } from "../../utils/request-helpers";
 
 export default function MiniDrawer() {
-  const selectedRegion = useStore((state) => state.selectedRegion);
-  const toggleTheme = useStore((state) => state.toggleTheme);
+  const selectedRegion = useDataStore((state) => state.selectedRegion);
+  const toggleTheme = useThemeStore((state) => state.toggleTheme);
   const navigate = useNavigate();
-  const client = useStore((state) => state.client);
+  const client = useAuthStore((state) => state.client);
 
   // Use command with navigate for client-side routing (no page reload)
   const MenuItemsAndIcons: MenuItem[] = [

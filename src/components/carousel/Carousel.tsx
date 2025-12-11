@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "primereact/button";
-import useStore from "../../store";
+import { useDataStore } from "../../store";
 
 const REGIONAL_ARTWORK = [
   { id: "kanto", name: "Kanto", img: "/images/Region Artwork/Kanto_Map.webp" },
@@ -15,7 +15,7 @@ const REGIONAL_ARTWORK = [
 ];
 
 export default function CustomCarousel() {
-  const { setSelectedRegion } = useStore();
+  const { setSelectedRegion } = useDataStore();
   const [viewport, setViewport] = useState(REGIONAL_ARTWORK[0]);
   const [currentIndex, setCurrentIndex] = useState(0);
 

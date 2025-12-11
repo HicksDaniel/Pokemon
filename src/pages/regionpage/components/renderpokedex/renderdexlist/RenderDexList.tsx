@@ -1,6 +1,6 @@
 import "./renderdexlist.css";
 
-import useStore from "../../../../../store";
+import { useDataStore } from "../../../../../store";
 import { cleanStringAndAbbreviate } from "../../../../../utils/string-helpers";
 
 import { Button } from "primereact/button";
@@ -8,7 +8,7 @@ import { Badge } from "primereact/badge";
 
 export default function RenderRegionDexList() {
   const { selectedRegion, allRegionalData, simplePokemonList, setSelectedDex, selectedDex } =
-    useStore();
+    useDataStore();
 
   if (!simplePokemonList || !allRegionalData || !selectedRegion) return null;
 

@@ -1,4 +1,5 @@
 export type UrlLink = `https://pokeapi.co/api/v2/${string}/${string}`;
+import type { Auth0Client } from "@auth0/auth0-spa-js";
 
 export interface PaginatedResponse<T> {
   count: number;
@@ -7,7 +8,7 @@ export interface PaginatedResponse<T> {
   results: T[];
 }
 
-export async function jsonFetch<T>(url: string, client: any): Promise<T> {
+export async function jsonFetch<T>(url: string, client: Auth0Client): Promise<T> {
   const accessToken = await client.getTokenSilently({
     authorizationParams: {
       audience: "https://localhost:3005",
@@ -20,15 +21,11 @@ export async function jsonFetch<T>(url: string, client: any): Promise<T> {
     },
   });
   const results = await response.json();
-
-  // if (results.message) {
-  //   console.log(`${results.message} - ${url}`);
-  // }
-
   return results.data;
 }
 
-export async function fetchCacheAll<T>(client: any): Promise<T> {
+export async function fetchCacheAll<T>(client: Auth0Client): Promise<T> {
+  console.log(client);
   const accessToken = await client.getTokenSilently({
     authorizationParams: {
       audience: "https://localhost:3005",
@@ -43,14 +40,10 @@ export async function fetchCacheAll<T>(client: any): Promise<T> {
   });
 
   const results = await response.json();
-
-  //   if (results.message) {
-  //     console.log(`${results.message} `);
-  //   }
   return results.data;
 }
 
-export async function clearCache<T>(client: any): Promise<T> {
+export async function clearCache<T>(client: Auth0Client): Promise<T> {
   const accessToken = await client.getTokenSilently();
   const response = await fetch(`http://localhost:3005/api/cache/clear`, {
     headers: {

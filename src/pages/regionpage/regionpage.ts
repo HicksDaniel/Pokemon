@@ -1,9 +1,28 @@
 import useStore from "../../store";
 
-export interface ResPointer {
+export interface NamedAPIResource {
   name: string;
   url: string;
-  message: string;
+}
+
+export interface EncounterDetail {
+  method: NamedAPIResource;
+  min_level: number;
+  max_level: number;
+  chance: number;
+  condition_values: NamedAPIResource[];
+  // If condition_values items have additional fields, you may extend accordingly.
+}
+
+export interface VersionDetail {
+  version: NamedAPIResource;
+  max_chance: number;
+  encounter_details: EncounterDetail[];
+}
+
+export interface Encounter {
+  pokemon: NamedAPIResource;
+  version_details: VersionDetail[];
 }
 
 export interface RegionListResponse {

@@ -1,39 +1,33 @@
-import useStore from "../../../../../store.ts";
+import { useDataStore } from "../../../../../store";
 import RouteDetails from "./RouteDetails.tsx";
+import DisplayArea from "./DisplayArea.tsx";
 
 export default function RegionRoutes() {
-  const {
-    selectedRegion,
-    allRegionalData,
-    selectedCategory,
-    setSelectedLocation,
-  } = useStore();
+  const { selectedCategory, setSelectedLocation, filteredCategory } = useDataStore();
 
-  if (!allRegionalData || !selectedRegion || !selectedCategory) return null;
-
-  const region = allRegionalData.find(r => r.region === selectedRegion);
-
-  const category = region.locations.find(c => c.title === selectedCategory);
-  if (!category?.data) return null;
+  if (!filteredCategory?.data) return null;
 
   return (
     <div className="flex w-full h-[830px] flex-row overflow-hidden gap-1 scroll-bar-hidden">
       <div className="flex w-3/16 flex-col gap-4 overflow-auto">
-        <div className="text-center"> {selectedCategory}</div>
-        <div className="text-center"> {category.data.length} Locations</div>
+        <div className="text-center"> {selectedCategory.title}</div>
+        <div className="text-center"> {filteredCategory.data.length} Locations</div>
         <div className=" h-full overflow-auto">
-          {category.data.map((loc) => (
-            <div
-              className="pl-3"
-              onClick={() => setSelectedLocation(loc)}
-              key={loc.name}
-            >
-              {loc.name}
-            </div>
-          ))}
+          {filteredCategory.data.map((loc: any) => {
+            return (
+              <div
+                className="pl-3 cursor-pointer hover:bg-gray-700"
+                onClick={() => setSelectedLocation(loc.name, loc.locData)}
+                key={loc.name}
+              >
+                {loc.name}
+              </div>
+            );
+          })}
         </div>
       </div>
-        <RouteDetails />
+      <RouteDetails />
+      <DisplayArea />
     </div>
   );
 }

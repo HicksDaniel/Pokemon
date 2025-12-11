@@ -1,10 +1,10 @@
-import useStore from "../../../../../store.ts";
+import { useDataStore } from "../../../../../store";
 import "./locationslist.css";
 import { cleanStringAndAbbreviate } from "../../../../../utils/string-helpers.ts";
+import { jsonFetch } from "../../../../../utils/request-helpers.ts";
 
 import { Button } from "primereact/button";
 import { Badge } from "primereact/badge";
-import { useState } from "react";
 
 export default function LocationsList() {
   const {
@@ -14,8 +14,9 @@ export default function LocationsList() {
     setSelectedCategory,
     selectedCategory,
     setSelectedGameVersion,
-    selectedGameVersion,
-  } = useStore();
+ 
+  } = useDataStore();
+
 
   if (!simplePokemonList || !allRegionalData || !selectedRegion) return null;
 
@@ -23,23 +24,44 @@ export default function LocationsList() {
 
   if (!locationsSelected?.locations) return null;
 
+  const fullFeaturesGames =
+    selectedRegion === "kanto"
+      ? [
+          "red",
+          "blue",
+          "yellow",
+          "gold",
+          "silver",
+          "crystal",
+          "firered",
+          "leafgreen",
+          "heartgold",
+          "soulsilver",
+          "lets go pikachu",
+          "lets go eevee",
+        ]
+      : locationsSelected.featuredGames;
+
+
   return (
     <>
       <div className="text-center">Featured Games</div>
+
       <div className="flex flex-row justify-center gap-5">
-        {locationsSelected.featuredGames.map((game) => (
+        {fullFeaturesGames.map((game) => (
           <Button onClick={() => setSelectedGameVersion(game)} size="small" key={game}>
             {cleanStringAndAbbreviate(game)}
           </Button>
         ))}
       </div>
+
       <div className="render-location-list">
         {locationsSelected.locations.map((category) => (
           <div className="dex-item" key={category.title}>
             <Button
               outlined={selectedCategory !== category.title}
               className="dex-button "
-              onClick={() => setSelectedCategory(category.title)}
+              onClick={() => setSelectedCategory(category)}
             >
               {cleanStringAndAbbreviate(category.title)}
             </Button>
