@@ -8,7 +8,7 @@ export default function DisplayArea() {
 
   const gameVer = POKEMON_GAME_VERSIONS[selectedGameVersion.replace(/ /g, "")];
 
-  if (!selectedArea.name) {
+  if (!selectedArea?.name) {
     return (
       <div className="flex justify-center items-center w-7/16">
         <p className="text-gray-400">Select a location to view the map</p>
