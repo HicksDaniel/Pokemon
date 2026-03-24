@@ -1,5 +1,5 @@
 
-import { EncounterRow } from "./EncounterRow";
+
 import type {Encounter} from "../../../regionpage.ts";
 
 export function EncounterTable({ encounters, selectedVersion } : { encounters: Encounter[], selectedVersion: any } ) {
@@ -13,15 +13,15 @@ export function EncounterTable({ encounters, selectedVersion } : { encounters: E
             </tr>
             </thead>
 
-            <tbody>
-            {encounters.map(encounter => (
-                <EncounterRow
-                    key={encounter.pokemon.name}
-                    encounter={encounter}
-                    selectedVersion={selectedVersion}
-                />
-            ))}
-            </tbody>
+            {/*<tbody>*/}
+            {/*{encounters.map(encounter => (*/}
+            {/*    <EncounterRow*/}
+            {/*        key={encounter.pokemon.name}*/}
+            {/*        encounter={encounter}*/}
+            {/*        selectedVersion={selectedVersion}*/}
+            {/*    />*/}
+            {/*))}*/}
+            {/*</tbody>*/}
         </table>
     );
 }

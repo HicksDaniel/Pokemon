@@ -5,6 +5,7 @@ import type {
   RegionLocationResponse,
   RegionPokeDexResponse,
   NamedAPIResource,
+  ResPointer,
 } from "../pages/regionpage/regionpage.ts";
 import { jsonFetch } from "../utils/request-helpers";
 import { cleanStringAndAbbreviate } from "../utils/string-helpers";
@@ -46,7 +47,7 @@ export type SimplePokemon = {
   url: string;
   imageUrl: string;
   cries: { latest: string; legacy: string };
-  types: { type1: string | null; type2: string | null };
+  type: { type1: string | null; type2: string | null };
 };
 
 type DataStore = {
@@ -92,6 +93,7 @@ const useDataStore = create<DataStore>((set, get) => ({
   selectedLocation: null,
   selectedArea: null,
   selectedEncounter: null,
+
 
   allRegionRes: null,
   allRegionalData: null,

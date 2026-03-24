@@ -3,7 +3,8 @@ import { useAuthStore, useDataStore } from "./store";
 import Layout from "./Layout";
 
 export default function App() {
-  const { authorizeUser, client } = useAuthStore();
+
+  const {authorizeUser, client } = useAuthStore();
   const { fetchListOfAllPokemon } = useDataStore();
 
   useEffect(() => {
@@ -16,5 +17,5 @@ export default function App() {
     initializeApp();
   }, []);
 
-  return <Layout />;
-}
+  return <Layout/>;
+};

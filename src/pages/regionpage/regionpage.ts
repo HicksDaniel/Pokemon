@@ -1,9 +1,10 @@
-import useStore from "../../store";
-
 export interface NamedAPIResource {
   name: string;
   url: string;
 }
+
+// Alias used throughout region interfaces
+export type ResPointer = NamedAPIResource;
 
 export interface EncounterDetail {
   method: NamedAPIResource;
@@ -78,4 +79,5 @@ export interface RegionPokeDexResponse {
     pokemon_species: ResPointer;
   }[];
   region: ResPointer;
+  version_groups: ResPointer[];
 }

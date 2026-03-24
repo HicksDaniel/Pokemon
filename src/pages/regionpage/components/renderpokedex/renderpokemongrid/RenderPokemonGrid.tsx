@@ -1,7 +1,8 @@
 import "./renderpokemongrid.css";
 
 import { useDataStore } from "../../../../../store";
-import createSimplePokemonCard from "../../../../../utils/SimplePokemonCard.tsx";
+import SimplePokemonCard from "../../../../../utils/SimplePokemonCard.tsx";
+
 export default function RenderPokemonGrid() {
   const { selectedRegion, allRegionalData, selectedDex } = useDataStore();
 
@@ -15,7 +16,7 @@ export default function RenderPokemonGrid() {
   return (
     <div className="pokemon-grid">
       {selectedDexData?.dexPokemonSpecies?.map((pokemon) => {
-        return createSimplePokemonCard(pokemon);
+        return <SimplePokemonCard pokemon={pokemon} key={pokemon?.id} />;
       })}
     </div>
   );
